@@ -9,7 +9,7 @@ https://www.kaggle.com/c/house-prices-advanced-regression-techniques
 
 rank: 2757, score: 0.15143
 
-🤔 it is surprising not bad cos i remove all of the non-numeric features
+🤔 it was surprising not bad cos i removed all of the non-numeric features
 
 ### 2nd attempt
   - feature-encode categorical(non-numeric) feaures
