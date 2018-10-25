@@ -37,15 +37,31 @@ class HousePrices():
   def extractNumeric(self, data):
     return data.select_dtypes(include=[np.number]).interpolate().dropna()
 
+  # pure function
+  # do it generically with pandas handy method
+  # problem: inconsistent columns
   # input:  training set
   # output: feature encoded training set
-  # pure function
-  # problem: inconsistent columns
-  def oneHotEncode(self, data):
+  def genericOneHotEncode(self, data):
     categoricals = data.select_dtypes(exclude=[np.number])
     categorical_columns = categoricals.columns.tolist()
     result = pd.get_dummies(train, columns=categorical_columns)
     return result
+    
+  # input:  training set
+  # output: feature encoded training set
+  # manual
+  def oneHotEncode(self, data):
+    # do it generically with pandas handy method
+    # problem: inconsistent columns
+    categoricals = data.select_dtypes(exclude=[np.number])
+    categorical_columns = categoricals.columns.tolist()
+    result = pd.get_dummies(train, columns=categorical_columns)
+    return result
+  
+  # lets see which one of either one-hot or feature-encoding can do a better job
+  def featureEncode(self, data):
+    return
 
   # predict the test data by train_test_split
   def crossValidate(self):
