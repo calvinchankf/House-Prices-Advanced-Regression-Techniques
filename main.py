@@ -117,3 +117,19 @@ hp = HousePrices()
 hp.trainModel()
 hp.crossValidate()
 hp.predict()
+
+# only numeric
+# R^2 is:
+#  0.862754706034
+# RMSE is:
+#  0.0233909053042
+
+# labelEncode
+# R^2 is:
+#  0.83816453824
+# RMSE is:
+#  0.0275818416172\
+# ❌ not good !!!
+
+
+# WHY ???
