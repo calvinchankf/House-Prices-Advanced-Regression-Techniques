@@ -7,8 +7,8 @@ from sklearn import linear_model
 from features import features_maping, feature_keys
 
 # TODO:
-# feature encoding: WIP
-# remove outliers: TBD
+# feature encoding: ✅
+# remove outliers: WIP
 
 
 class HousePrices():
@@ -22,7 +22,7 @@ class HousePrices():
         train = pd.read_csv('./data/train.csv')
 
         # try feature encoding
-        train = self.labelEncode(train)
+        train = self.oneHotEncode(train)
 
         # extract number
         train = self.extractNumeric(train)
@@ -44,36 +44,17 @@ class HousePrices():
     def extractNumeric(self, data):
         return data.select_dtypes(include=[np.number]).interpolate().dropna()
 
-    # pure function
-    # do it generically with pandas handy method
-    # problem: inconsistent columns
-    # input:  training set
-    # output: feature encoded training set
-    def genericOneHotEncode(self, data):
-        categoricals = data.select_dtypes(exclude=[np.number])
-        categorical_columns = categoricals.columns.tolist()
-        result = pd.get_dummies(data, columns=categorical_columns)
-        return result
-
     # input:  training set
     # output: feature encoded training set
     # manual
     def oneHotEncode(self, data):
-        return data
-
-    # lets see which one of either one-hot or feature-encoding can do a better job
-    # manual
-    # R^2 is:
-    #  0.83816453824
-    # RMSE is:
-    #  0.0275818416172\
-    # ❌ not good !!!
-    def labelEncode(self, data):
         keys = list(feature_keys().keys())
+        result = data
         for k in keys:
-            data[k] = data[k].map(features_maping(k)).fillna(-1)
-
-        return data
+            result[k] = result[k].astype(
+                'category', categories=feature_keys()[k])
+            result = pd.get_dummies(result, prefix=k, columns=[k])
+        return result
 
     # predict the test data by train_test_split
     def crossValidate(self):
@@ -98,7 +79,7 @@ class HousePrices():
         submission['Id'] = data.Id
 
         # try feature encoding
-        data = self.labelEncode(data)
+        data = self.oneHotEncode(data)
 
         # extract number
         data = self.extractNumeric(data)
@@ -124,12 +105,9 @@ hp.predict()
 # RMSE is:
 #  0.0233909053042
 
-# labelEncode
+# one hot encding
 # R^2 is:
-#  0.83816453824
+#  0.896105169561
 # RMSE is:
-#  0.0275818416172\
-# ❌ not good !!!
-
-
-# WHY ???
+#  0.017706939671
+# I made progress !!!
