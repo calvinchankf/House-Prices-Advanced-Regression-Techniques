@@ -5,3 +5,5 @@ tensorflow==1.4.1
 pandas
 sklearn
 jupyter
+seaborn
+scipy
